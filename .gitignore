@@ -7,6 +7,11 @@ yarn-error.log*
 # Build outputs
 build/
 
+# Note: The following generated files are intentionally tracked for GitHub Pages deployment
+# game.js - Main game bundle
+# game.js.LICENSE.txt - License information
+# index.html - Main game page
+
 # Environment variables
 .env
 .env.local

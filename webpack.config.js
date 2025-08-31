@@ -5,9 +5,9 @@ module.exports = {
   mode: 'development',
   entry: './src/game.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname),
     filename: 'game.js',
-    clean: true
+    clean: false
   },
   module: {
     rules: [
@@ -31,7 +31,7 @@ module.exports = {
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, 'dist')
+      directory: path.join(__dirname)
     },
     compress: true,
     port: 3000,
