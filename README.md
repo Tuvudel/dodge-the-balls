@@ -12,6 +12,10 @@ A thrilling web-based game built with Phaser.js where you must dodge falling spi
 - **Smooth Gameplay**: 60 FPS with optimized physics
 - **Visual Effects**: Modern UI with gradients and blur effects
 
+## Play!
+
+**[Play!] (https://tuvudel.github.io/dodge-the-spiked-balls)**
+
 ## 🚀 Quick Start
 
 ### Prerequisites
