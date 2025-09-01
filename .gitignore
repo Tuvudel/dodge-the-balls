@@ -7,8 +7,6 @@ yarn-error.log*
 # Build outputs
 dist/
 build/
-game.js
-index.html
 game.js.LICENSE.txt
 *.bundle.js
 *.bundle.js.map
