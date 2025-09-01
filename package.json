@@ -5,14 +5,20 @@
   "main": "index.html",
   "scripts": {
     "build": "webpack --mode production",
-    "dev": "webpack --mode development --watch",
-    "start": "webpack --mode development && http-server dist -p 8080 -o -i",
-    "serve": "http-server dist -p 8080 -o -i",
-    "clean": "if exist dist rmdir /s /q dist",
+    "dev": "webpack serve --mode development",
+    "start": "webpack --mode development && http-server docs -p 8080 -o -i",
+    "serve": "http-server docs -p 8080 -o -i",
+    "clean": "if exist docs rmdir /s /q docs",
     "rebuild": "npm run clean && npm run build",
     "lint": "echo 'No linter configured yet'"
   },
-  "keywords": ["game", "phaser", "web-game", "dodge", "balls"],
+  "keywords": [
+    "game",
+    "phaser",
+    "web-game",
+    "dodge",
+    "balls"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
@@ -23,7 +29,8 @@
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.1",
     "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.0"
+    "webpack-cli": "^5.1.0",
+    "webpack-dev-server": "^5.2.2"
   },
   "dependencies": {
     "phaser": "^3.60.0"

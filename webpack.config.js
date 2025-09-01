@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'),
     filename: 'game.js',
     clean: true
   },
@@ -25,8 +25,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
-      filename: 'index.html'
+      template: 'src/index.template.html',
+      filename: 'index.html',
+      inject: 'body'
     })
   ],
   devServer: {
@@ -35,6 +36,7 @@ module.exports = {
     },
     compress: true,
     port: 3000,
-    open: true
+    open: true,
+    hot: true
   }
 };

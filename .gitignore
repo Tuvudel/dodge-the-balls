@@ -5,11 +5,12 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build outputs
-dist/
 build/
-game.js.LICENSE.txt
 *.bundle.js
 *.bundle.js.map
+
+# GitHub Pages - docs/ folder should be committed
+# docs/
 
 # Environment variables
 .env
