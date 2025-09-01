@@ -5,12 +5,13 @@ yarn-debug.log*
 yarn-error.log*
 
 # Build outputs
+dist/
 build/
-
-# Note: The following generated files are intentionally tracked for GitHub Pages deployment
-# game.js - Main game bundle
-# game.js.LICENSE.txt - License information
-# index.html - Main game page
+game.js
+index.html
+game.js.LICENSE.txt
+*.bundle.js
+*.bundle.js.map
 
 # Environment variables
 .env
@@ -19,18 +20,24 @@ build/
 .env.test.local
 .env.production.local
 
-# IDE
+# IDE/Editor files
 .vscode/
 .idea/
 *.swp
 *.swo
-.playwright-mcp
+*~
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Logs
+logs
 *.log
 
 # Runtime data
@@ -42,6 +49,12 @@ pids
 # Coverage directory used by tools like istanbul
 coverage/
 
-# Game assets (if large)
-# assets/audio/
-# assets/images/
+# Temporary folders
+tmp/
+temp/
+
+# Phaser specific
+phaser/
+
+# Local development
+.cache/
