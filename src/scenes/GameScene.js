@@ -1,5 +1,5 @@
 import { GAME_CONFIG, PLAYER_CONFIG, BALL_CONFIG } from '../config/constants.js';
-import { formatTime } from '../utils/helpers.js';
+import { formatTime, devSettings, devLog, isDevelopment } from '../utils/helpers.js';
 import { GameUI } from '../components/ui.js';
 import { scoreService } from '../services/ScoreService.js';
 import { gameEvents, GAME_EVENTS } from '../events/GameEvents.js';
@@ -46,6 +46,10 @@ export class GameScene extends Phaser.Scene {
     // Initialize input manager
     this.inputManager = createInputManager(this);
 
+    // Set up physics world gravity (use dev settings if in development)
+    const gravity = isDevelopment() ? devSettings.get('gravity') : GAME_CONFIG.GRAVITY;
+    this.physics.world.gravity.y = gravity;
+
     // Start score tracking
     scoreService.startGame();
 
@@ -53,18 +57,24 @@ export class GameScene extends Phaser.Scene {
     this.player = this.physics.add.sprite(GAME_CONFIG.WIDTH / 2, GAME_CONFIG.HEIGHT - 50, 'player');
     this.player.setCollideWorldBounds(true);
     this.player.setImmovable(true);
-    console.log('👤 Player created');
+    devLog('👤 Player created');
 
     // Create ball group
     this.balls = this.physics.add.group();
 
-    // Create timer event for spawning balls
+    // Create timer event for spawning balls (use dev settings if available)
+    const spawnRate = isDevelopment() ? devSettings.get('ballSpawnRate') : BALL_CONFIG.SPAWN_RATE;
     this.ballSpawnTimer = this.time.addEvent({
-      delay: BALL_CONFIG.SPAWN_RATE,
+      delay: spawnRate,
       callback: this.spawnBall,
       callbackScope: this,
       loop: true
     });
+
+    // Set up dev settings listeners if in development
+    if (isDevelopment()) {
+      this.setupDevSettingsListeners();
+    }
 
     // Add collision detection
     this.physics.add.overlap(this.player, this.balls, this.gameOverHandler, null, this);
@@ -183,7 +193,10 @@ export class GameScene extends Phaser.Scene {
     if (this.gameState === GAME_STATES.PLAYING) {
       const x = Phaser.Math.Between(BALL_CONFIG.SIZE, GAME_CONFIG.WIDTH - BALL_CONFIG.SIZE);
       const ball = this.balls.create(x, -BALL_CONFIG.SIZE, 'ball');
-      ball.setVelocityY(BALL_CONFIG.SPEED);
+
+      // Use dev settings for ball speed if in development
+      const ballSpeed = isDevelopment() ? devSettings.get('ballSpeed') : BALL_CONFIG.SPEED;
+      ball.setVelocityY(ballSpeed);
       ball.setBounce(0);
     }
   }
@@ -194,7 +207,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    console.log('💥 Game Over! Final time:', formatTime(this.elapsedTime));
+    devLog('💥 Game Over! Final time:', formatTime(this.elapsedTime));
     this.collisionHandled = true;
 
     this.gameState = GAME_STATES.GAME_OVER;
@@ -325,6 +338,38 @@ export class GameScene extends Phaser.Scene {
       playerPosition: this.player ? { x: this.player.x, y: this.player.y } : null,
       fps: this.frameCount
     };
+  }
+
+  // Set up listeners for development settings changes
+  setupDevSettingsListeners() {
+    // Ball spawn rate changes
+    devSettings.onChange('ballSpawnRate', (newRate) => {
+      if (this.ballSpawnTimer) {
+        this.ballSpawnTimer.delay = newRate;
+        devLog(`🔧 Ball spawn rate updated to ${newRate}ms`);
+      }
+    });
+
+    // Ball speed changes
+    devSettings.onChange('ballSpeed', (newSpeed) => {
+      // Update existing balls
+      this.balls.getChildren().forEach(ball => {
+        ball.setVelocityY(newSpeed);
+      });
+      devLog(`🔧 Ball speed updated to ${newSpeed}`);
+    });
+
+    // Gravity changes
+    devSettings.onChange('gravity', (newGravity) => {
+      this.physics.world.gravity.y = newGravity;
+      devLog(`🔧 Gravity updated to ${newGravity}`);
+    });
+
+    // Player speed changes
+    devSettings.onChange('playerSpeed', (newSpeed) => {
+      // Player speed will be applied on next movement
+      devLog(`🔧 Player speed updated to ${newSpeed}`);
+    });
   }
 
   // Clean up resources when scene is destroyed
